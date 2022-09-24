@@ -14,7 +14,7 @@ namespace Infrastructure
         public IMongoDatabase NotificationDatabase { get; set; }
         public AppDB()
         {
-            _mongoClient = new MongoClient(connectionString: "mongodb://localhost:27017");
+            _mongoClient = new MongoClient(connectionString: "mongodb://emailsender-db:27017");
             NotificationDatabase = _mongoClient.GetDatabase("notification");
         }
         public IMongoCollection<Notification> GetNotificationCollection()

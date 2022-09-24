@@ -1,6 +1,8 @@
 ﻿using Core.IServices;
 using Core.Models;
+using Core.Models.Options;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -15,12 +17,14 @@ namespace Core.Services
     public class RabbitMqListener : BackgroundService
     {
         private readonly IEmailService _emailService;
+        private readonly RabbitMqOptions _rabbitMqOptions;
         private IConnection _connection;
         private IModel _channel;
-        public RabbitMqListener(IEmailService emailService)
+        public RabbitMqListener(IEmailService emailService,IOptions<RabbitMqOptions> options)
         {
             _emailService = emailService;
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            _rabbitMqOptions = options.Value;
+            var factory = new ConnectionFactory() { HostName = _rabbitMqOptions.HostName };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
         }
@@ -28,7 +32,7 @@ namespace Core.Services
         {
             stoppingToken.ThrowIfCancellationRequested();
             var consumer = new EventingBasicConsumer(_channel);
-            _channel.QueueDeclare("users", durable: true, exclusive: false, autoDelete: false, arguments: null);
+            _channel.QueueDeclare(_rabbitMqOptions.Queue, durable: true, exclusive: false, autoDelete: false, arguments: null);
             consumer.Received += async (model, eventArgs) =>
             {
                 var body = eventArgs.Body.ToArray();

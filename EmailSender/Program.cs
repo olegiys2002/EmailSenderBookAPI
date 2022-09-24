@@ -1,6 +1,7 @@
 using Core.IServices;
 using Core.Models;
 using Core.Services;
+using EmailSender.ServicesConfiguration;
 using Infrastructure;
 using Infrastructure.UnitOfWork;
 using Newtonsoft.Json;
@@ -16,6 +17,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<INotificationService, NotificationService>();
+builder.Services.ConfigureOptionsRabbit(builder.Configuration);
 builder.Services.AddSingleton<AppDB>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
