@@ -2,9 +2,9 @@
 {
     public interface IRepositoryBase <T>
     {
-        //IQueryable<T> FindAll(bool trackChanges);
         Task Create(T entity);
-
-        //void Update(T entity);
+        Task<T> FindByIdAsync(string id);
+        Task Delete(string id);
+        Task<List<T>> FindAllAsync();
     }
 }

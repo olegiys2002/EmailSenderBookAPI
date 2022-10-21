@@ -6,11 +6,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
@@ -33,6 +29,7 @@ namespace Core.Services
             stoppingToken.ThrowIfCancellationRequested();
             var consumer = new EventingBasicConsumer(_channel);
             _channel.QueueDeclare(_rabbitMqOptions.Queue, durable: true, exclusive: false, autoDelete: false, arguments: null);
+
             consumer.Received += async (model, eventArgs) =>
             {
                 var body = eventArgs.Body.ToArray();
@@ -41,6 +38,7 @@ namespace Core.Services
 
                 await _emailService.SendNotification(obj.Email, obj.Tables);
             };
+
             _channel.BasicConsume(queue: "users", autoAck: true, consumer: consumer);
             return Task.CompletedTask;
         }

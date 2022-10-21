@@ -1,13 +1,5 @@
-using Core.IServices;
-using Core.Models;
 using Core.Services;
-using EmailSender.ServicesConfiguration;
-using Infrastructure;
-using Infrastructure.UnitOfWork;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
+using EmailSender.API.ServicesConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
-builder.Services.AddSingleton<INotificationService, NotificationService>();
 builder.Services.ConfigureOptionsRabbit(builder.Configuration);
-builder.Services.AddSingleton<AppDB>();
+builder.Services.ConfigureCustomServices();
+builder.Services.ConfigureAutoMapper();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IEmailService, GmailService>();
 builder.Services.AddHostedService<RabbitMqListener>();
 
 var app = builder.Build();

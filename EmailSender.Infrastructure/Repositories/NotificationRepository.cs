@@ -1,17 +1,14 @@
 ﻿using Core.IServices;
 using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EmailSender.Core.ExternalModels.OptionsModels;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Repositories
 {
     public class NotificationRepository : EntityRepository<Notification>,INotificationRepository
     {
 
-        public NotificationRepository(AppDB appDB) : base(appDB)
+        public NotificationRepository(IOptions<MongoDbConnectionSettings> mongoDbConnection) : base(mongoDbConnection)
         {
 
         }

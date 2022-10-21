@@ -1,26 +1,23 @@
 ﻿using Core.IServices;
+using EmailSender.Core.ExternalModels.OptionsModels;
 using Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly AppDB _appDB;
+        private readonly IOptions<MongoDbConnectionSettings> _mongoDbConnection;
         private INotificationRepository _notificationRepository;
-        public UnitOfWork(AppDB appDB)
+        public UnitOfWork(IOptions<MongoDbConnectionSettings> mongoDbConnection)
         {
-            _appDB = appDB;
+            _mongoDbConnection = mongoDbConnection;
         }
         public INotificationRepository NotificationRepository
         {
             get
             {
-                _notificationRepository ??= new NotificationRepository(_appDB);
+                _notificationRepository ??= new NotificationRepository(_mongoDbConnection);
                 return _notificationRepository;
             }
         }

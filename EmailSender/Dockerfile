@@ -3,22 +3,19 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["EmailSender/EmailSender.csproj", "EmailSender/"]
-COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
-COPY ["Core/Core.csproj", "Core/"]
-RUN dotnet restore "EmailSender/EmailSender.csproj"
+COPY ["EmailSender/EmailSender.API.csproj", "EmailSender/"]
+RUN dotnet restore "EmailSender/EmailSender.API.csproj"
 COPY . .
 WORKDIR "/src/EmailSender"
-RUN dotnet build "EmailSender.csproj" -c Release -o /app/build
+RUN dotnet build "EmailSender.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EmailSender.csproj" -c Release -o /app/publish
+RUN dotnet publish "EmailSender.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "EmailSender.dll"]
+ENTRYPOINT ["dotnet", "EmailSender.API.dll"]

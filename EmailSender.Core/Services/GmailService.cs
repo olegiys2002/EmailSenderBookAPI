@@ -1,21 +1,15 @@
 ﻿using Core.IServices;
+using Core.Models;
 using MailKit.Net.Smtp;
 using MimeKit;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
     public class GmailService : IEmailService
     {
-        private readonly INotificationService _notificationService;
-        public GmailService(INotificationService notificationService)
+        public GmailService()
         {
-            _notificationService = notificationService;
+  
         }
         public async Task SendNotification(string email, List<int> tables)
         {
@@ -46,8 +40,13 @@ namespace Core.Services
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true);
             }
-            var notification = _notificationService.GetNotification(message);
-            await _notificationService.CreateNotification(notification);
+            //var notification = new Notification()
+            //{ 
+            //    CreatedAt = DateTime.Now ,
+            //    UpdatedAt = DateTime.Now,
+            //    Message = message,
+            //};
+            //await _notificationService.CreateNotification(notification);
         }
     }
 }
