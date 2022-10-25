@@ -1,4 +1,3 @@
-using Core.Services;
 using EmailSender.API.ServicesConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +10,8 @@ builder.Services.ConfigureOptionsRabbit(builder.Configuration);
 builder.Services.ConfigureCustomServices();
 builder.Services.ConfigureAutoMapper();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.ConfigureMassTransit(builder.Configuration);
 builder.Services.AddSwaggerGen();
-builder.Services.AddHostedService<RabbitMqListener>();
 
 var app = builder.Build();
 

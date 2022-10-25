@@ -11,7 +11,7 @@ namespace EmailSender.API.ServicesConfiguration
         {
             services.AddSingleton<IUnitOfWork, UnitOfWork>();
             services.AddScoped<INotificationService, NotificationService>();
-            services.AddSingleton<IEmailService, GmailService>();
+            services.AddScoped<IEmailService, GmailService>();
         }
     }
 }
