@@ -13,8 +13,7 @@ namespace EmailSender.Core.Services
         }
         public async Task Consume(ConsumeContext<Notification> context)
         {
-           await _emailService.SendNotification(context.Message.Email, context.Message.Tables);
-          
+           await _emailService.SendNotification(context.Message.Email, context.Message.Tables);   
         }
     }
 }
